@@ -8,6 +8,9 @@ plugins {
     id("maven-publish")
 }
 
+group = "com.tryanything"
+version = project.properties["version"] as String
+
 kotlin {
     androidTarget {
         compilations.all {
@@ -63,6 +66,14 @@ publishing{
                 username = System.getenv("USERNAME")
                 password = System.getenv("TOKEN")
             }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["kotlin"])
+            groupId = project.group.toString()
+            artifactId = "myfavorites-core"
+            version = project.version.toString()
         }
     }
 }
