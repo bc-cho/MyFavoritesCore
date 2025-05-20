@@ -9,8 +9,8 @@ name: Gradle Package
 
 on:
   push:
-    branches:
-      - develop
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -42,3 +42,4 @@ jobs:
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.PUBLISHKEY }}
+        TAG_VERSION: ${{ github.ref_name }}

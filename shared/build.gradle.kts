@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import kotlin.text.replace
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -74,7 +75,7 @@ publishing{
             from(components["kotlin"])
             groupId = project.group.toString()
             artifactId = "myfavorites-core"
-            version = project.version.toString()
+            version = System.getenv("TAG_VERSION")?.replace("v", "") ?: project.version.toString()
         }
     }
 }
