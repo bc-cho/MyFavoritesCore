@@ -13,6 +13,7 @@ version = project.properties["version"] as String
 
 kotlin {
     androidTarget {
+        publishLibraryVariants("debug")
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
