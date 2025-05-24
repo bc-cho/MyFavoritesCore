@@ -45,12 +45,16 @@ kotlin {
             implementation(libs.ktor.client.serialization)
             implementation(libs.ktor.client.negotiation)
             implementation(libs.ktor.serialization.json)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
         }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
 
         androidMain.dependencies {
+            implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
         }
 
