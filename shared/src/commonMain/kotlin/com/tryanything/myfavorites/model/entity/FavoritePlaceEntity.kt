@@ -6,7 +6,7 @@ import com.tryanything.myfavorites.model.dto.FavoriteDto
 
 @Entity
 data class FavoritePlaceEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val name: String,
     val address: String,
     val imageUrl: String? = null,
@@ -15,6 +15,7 @@ data class FavoritePlaceEntity(
     val deleted: Int = 0
 ) {
     constructor(item: FavoriteDto) : this(
+        id = item.id,
         name = item.name,
         address = item.address,
         imageUrl = null,

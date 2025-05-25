@@ -3,7 +3,7 @@ package com.tryanything.myfavorites.model.dto
 import com.tryanything.myfavorites.model.entity.FavoritePlaceEntity
 
 class FavoriteDto(
-    val id: Long,
+    val id: Long = 0L,
     val name: String,
     val address: String,
     val imageUrl: String? = null,
