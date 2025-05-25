@@ -30,7 +30,6 @@ internal class DefaultPlacesService(val mapsHelper: MapsHelper) : PlaceService {
             url {
                 protocol = URLProtocol.HTTPS
                 host = BASE_HOST
-                parameters["key"] = mapsHelper.getApiKey()
             }
         }
         install(ContentNegotiation) {
@@ -46,7 +45,10 @@ internal class DefaultPlacesService(val mapsHelper: MapsHelper) : PlaceService {
         val result = httpClient.post("v1/places:searchText") {
             contentType(ContentType.Application.Json)
             header("X-Goog-Api-Key", mapsHelper.getApiKey())
-            header("X-Goog-FieldMask", "places.displayName,places.formattedAddress")
+            header(
+                "X-Goog-FieldMask",
+                "places.displayName,places.formattedAddress,places.location,places.photos"
+            )
             setBody(Json.encodeToString(SearchRequest(text)))
         }.body<Places>()
         return result.places?.map { it.toDto() } ?: emptyList()

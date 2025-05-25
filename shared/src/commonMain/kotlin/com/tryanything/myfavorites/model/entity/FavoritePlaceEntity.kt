@@ -18,7 +18,7 @@ data class FavoritePlaceEntity(
         id = item.id,
         name = item.name,
         address = item.address,
-        imageUrl = null,
+        imageUrl = item.imageUrl,
         latitude = item.lat,
         longitude = item.lon
     )
