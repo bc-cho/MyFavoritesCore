@@ -4,28 +4,37 @@ import com.tryanything.myfavorites.model.dto.PlaceDto
 import com.tryanything.myfavorites.network.PlaceService
 import com.tryanything.myfavorites.repository.datasource.DefaultMemoryDataSource
 import com.tryanything.myfavorites.repository.datasource.MemoryDataSource
-import io.mockative.coEvery
-import io.mockative.coVerify
-import io.mockative.mock
-import io.mockative.of
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class PlaceRepositoryTest {
 
-    lateinit var placeRepository: PlaceRepository
+    private lateinit var placeRepository: PlaceRepository
 
-    lateinit var memoryDataSource: MemoryDataSource
+    private lateinit var memoryDataSource: MemoryDataSource
 
-    lateinit var placeService: PlaceService
+    private lateinit var mockPlaceService: MockPlayService
 
     @BeforeTest
-    fun test() {
-        placeService = mock(of<PlaceService>())
+    fun setUp() {
+        mockPlaceService = MockPlayService()
         memoryDataSource = DefaultMemoryDataSource()
-        placeRepository = DefaultPlaceRepository(memoryDataSource, placeService)
+        placeRepository = DefaultPlaceRepository(memoryDataSource, mockPlaceService)
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -35,30 +44,26 @@ internal class PlaceRepositoryTest {
 
     @Test
     fun testIfThereIsCacheAfterSearch() = runTest {
-        coEvery {
-            placeService.searchByText("station")
-        }.returns(places1)
+        mockPlaceService.setResults(twoPlaces)
         placeRepository.searchByText("station")
         assertTrue(memoryDataSource.searchResultData.value.isNotEmpty())
     }
 
     @Test
     fun testNoAPICallWhenCacheExists() = runTest {
-        coEvery {
-            placeService.searchByText("station")
-        }.returns(places1)
-        placeRepository.searchByText("station")
-        coEvery {
-            placeService.searchByText("station")
-        }.returns(emptyList())
+        mockPlaceService.setResults(twoPlaces)
+        val networkResult = placeRepository.searchByText("station")
+
+        assertTrue(networkResult.isNotEmpty())
+
+        mockPlaceService.setResults(noResults)
         val result = placeRepository.searchByText("station")
-        assertTrue(memoryDataSource.searchResultData.value.isNotEmpty())
+
+        assertTrue(memoryDataSource.searchResultData.value["station"]?.size == 2)
         assertTrue(result.isNotEmpty())
-        // 失敗するテスト作成
-        coVerify {placeService.searchByText("station") }.wasInvoked(exactly = 2)
     }
 
-    private val places1 = listOf(
+    private val twoPlaces = listOf(
         PlaceDto(
             name = "Harajuku Station",
             address = "〒150-0001 東京都渋谷区神宮前１丁目１８"
@@ -68,4 +73,20 @@ internal class PlaceRepositoryTest {
             address = "〒160-0022 東京都新宿区新宿３丁目３８−１"
         )
     )
+
+    private val noResults = listOf<PlaceDto>()
+
+    // FIXME: Mockativeを使う
+    private class MockPlayService : PlaceService {
+        private var _results: MutableList<PlaceDto> = mutableListOf()
+
+        fun setResults(newValue: List<PlaceDto>) {
+            _results.clear()
+            _results.addAll(newValue)
+        }
+
+        override suspend fun searchByText(text: String): List<PlaceDto> {
+            return if (text == "station") _results.toList() else emptyList()
+        }
+    }
 }
