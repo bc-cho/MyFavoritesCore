@@ -71,8 +71,8 @@ kotlin {
         }
 
         androidUnitTest.dependencies {
-            implementation("junit:junit:4.13.2")
-            implementation("org.robolectric:robolectric:4.14.1")
+            implementation(libs.junit)
+            implementation(libs.robolectric)
         }
     }
 }
