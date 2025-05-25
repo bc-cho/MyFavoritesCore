@@ -3,6 +3,7 @@ package com.tryanything.myfavorites.model.dto
 import com.tryanything.myfavorites.model.entity.FavoritePlaceEntity
 
 class FavoriteDto(
+    val id: Long,
     val name: String,
     val address: String,
     val imageUrl: String? = null,
@@ -10,6 +11,7 @@ class FavoriteDto(
     val lon: Double
 ) {
     constructor(item: FavoritePlaceEntity) : this(
+        id = item.id,
         name = item.name,
         address = item.address,
         imageUrl = item.imageUrl,
