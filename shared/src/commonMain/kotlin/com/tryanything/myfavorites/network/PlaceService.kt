@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 
 private const val BASE_HOST = "places.googleapis.com"
 
-interface PlaceService {
+internal interface PlaceService {
     suspend fun searchByText(text: String): List<PlaceDto>
 }
 
