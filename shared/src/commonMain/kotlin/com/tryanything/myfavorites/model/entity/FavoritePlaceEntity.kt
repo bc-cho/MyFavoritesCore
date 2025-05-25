@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.tryanything.myfavorites.model.dto.FavoriteDto
 
-@Entity
+@Entity(tableName = "favorite_place")
 data class FavoritePlaceEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
