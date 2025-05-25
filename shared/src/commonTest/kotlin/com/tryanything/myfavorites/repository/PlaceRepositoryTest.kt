@@ -54,7 +54,8 @@ internal class PlaceRepositoryTest {
         val result = placeRepository.searchByText("station")
         assertTrue(memoryDataSource.searchResultData.value.isNotEmpty())
         assertTrue(result.isNotEmpty())
-        coVerify {placeService.searchByText("station") }.wasInvoked(exactly = 1)
+        // 失敗するテスト作成
+        coVerify {placeService.searchByText("station") }.wasInvoked(exactly = 2)
     }
 
     private val places1 = listOf(
