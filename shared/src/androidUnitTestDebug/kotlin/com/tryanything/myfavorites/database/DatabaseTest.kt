@@ -51,9 +51,7 @@ class DatabaseTest {
     fun deleteFavorite() = runTest {
         favoriteDao.insert(FavoritePlaceEntity(0, "Place1", "Address1", null, 37.1, 127.1))
         assertTrue(favoriteDao.getAllFavorites().first().isNotEmpty())
-        favoriteDao.updateFavorite(
-            favoriteDao.getAllFavorites().first().first().copy(deleted = 1)
-        )
+        assertTrue(favoriteDao.deleteFavorite(favoriteDao.getAllFavorites().first().first().id) == 1)
         assertTrue(favoriteDao.getAllFavorites().first().isEmpty())
     }
 }

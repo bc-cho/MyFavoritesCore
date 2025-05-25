@@ -19,6 +19,9 @@ interface FavoritePlaceDao {
     @Query("SELECT * FROM FavoritePlaceEntity WHERE deleted = 0")
     fun getAllFavorites(): Flow<List<FavoritePlaceEntity>>
 
+    @Query("UPDATE FavoritePlaceEntity SET deleted = 1 WHERE id = :id")
+    fun deleteFavorite(id: Long): Int
+
     @Update
     fun updateFavorite(id: FavoritePlaceEntity): Int
 }
