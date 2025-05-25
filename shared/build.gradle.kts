@@ -47,7 +47,6 @@ kotlin {
             implementation(libs.ktor.client.serialization)
             implementation(libs.ktor.client.negotiation)
             implementation(libs.ktor.serialization.json)
-            implementation(project.dependencies.platform(libs.kotlin.coroutines.bom))
             implementation(libs.kotlin.coroutines.core)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
@@ -64,10 +63,16 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.robolectric)
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+        }
+
+        androidUnitTest.dependencies {
+            implementation("junit:junit:4.13.2")
+            implementation("org.robolectric:robolectric:4.14.1")
         }
     }
 }
