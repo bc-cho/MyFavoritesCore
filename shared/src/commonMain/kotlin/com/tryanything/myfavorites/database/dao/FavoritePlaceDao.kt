@@ -20,8 +20,8 @@ interface FavoritePlaceDao {
     fun getAllFavorites(): Flow<List<FavoritePlaceEntity>>
 
     @Query("UPDATE FavoritePlaceEntity SET deleted = 1 WHERE id = :id")
-    fun deleteFavorite(id: Long): Int
+    suspend fun deleteFavorite(id: Long): Int
 
     @Update
-    fun updateFavorite(id: FavoritePlaceEntity): Int
+    suspend fun updateFavorite(id: FavoritePlaceEntity): Int
 }
