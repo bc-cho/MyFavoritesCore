@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.update
 
 typealias Keyword = String
 
-internal interface MemoryDataSource {
+interface MemoryDataSource {
 
     val searchResultData: StateFlow<Map<Keyword, List<PlaceDto>>>
 
