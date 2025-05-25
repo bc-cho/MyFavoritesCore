@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.mockative)
+    alias(libs.plugins.ksp)
     id("maven-publish")
 }
 
@@ -24,7 +26,7 @@ kotlin {
             }
         }
     }
-    
+
     val xcf = XCFramework()
     listOf(
         iosX64(),
@@ -40,17 +42,19 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlin.coroutines.core)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.serialization)
             implementation(libs.ktor.client.negotiation)
             implementation(libs.ktor.serialization.json)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
+            implementation(libs.mockative)
         }
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlin.coroutines.test)
         }
 
         androidMain.dependencies {
@@ -76,9 +80,9 @@ android {
     }
 }
 
-publishing{
-    repositories{
-        maven{
+publishing {
+    repositories {
+        maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/bc-cho/MyFavoritesCore")
             credentials {
