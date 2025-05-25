@@ -14,14 +14,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import io.mockative.Mockable
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 private const val BASE_HOST = "places.googleapis.com"
 
-// TODO: all-openの使用を検討
-@Mockable
 interface PlaceService {
     suspend fun searchByText(text: String): List<PlaceDto>
 }

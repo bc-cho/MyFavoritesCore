@@ -7,7 +7,9 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.mockative)
+    // FIXME: Mockativeの使用を検討する
+    // https://github.com/bc-cho/MyFavoritesCore/issues/13
+//    alias(libs.plugins.mockative)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     id("maven-publish")
@@ -50,7 +52,7 @@ kotlin {
             implementation(libs.kotlin.coroutines.core)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
-            implementation(libs.mockative)
+//            implementation(libs.mockative)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
         }
