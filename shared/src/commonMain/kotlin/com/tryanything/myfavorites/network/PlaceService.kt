@@ -49,9 +49,9 @@ internal class DefaultPlacesService(val mapsHelper: MapsHelper) : PlaceService {
             header("X-Goog-FieldMask", "places.displayName,places.formattedAddress")
             setBody(Json.encodeToString(SearchRequest(text)))
         }.body<Places>()
-        return result.places.map { it.toDto() }
+        return result.places?.map { it.toDto() } ?: emptyList()
     }
 
     @Serializable
-    internal data class SearchRequest(val textQuery: String)
+    private data class SearchRequest(val textQuery: String)
 }

@@ -4,7 +4,7 @@ import com.tryanything.myfavorites.model.dto.PlaceDto
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class Places(val places: List<Place>)
+internal data class Places(val places: List<Place>?)
 
 @Serializable
 internal data class Place(
