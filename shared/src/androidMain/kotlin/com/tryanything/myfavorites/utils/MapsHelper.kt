@@ -3,7 +3,12 @@ package com.tryanything.myfavorites.utils
 import android.content.Context
 import android.content.pm.PackageManager
 
-actual class MapsHelper(val context: Context) {
+actual open class MapsHelper {
+
+    actual open fun getApiKey(): String = ""
+}
+
+class MapsHelperImpl(val context: Context) : MapsHelper() {
 
     val mapApiKey: String
 
@@ -18,5 +23,5 @@ actual class MapsHelper(val context: Context) {
             ?: throw IllegalStateException("Map Api key is not configured")
     }
 
-    actual fun getApiKey(): String = mapApiKey
+    override fun getApiKey(): String = mapApiKey
 }
