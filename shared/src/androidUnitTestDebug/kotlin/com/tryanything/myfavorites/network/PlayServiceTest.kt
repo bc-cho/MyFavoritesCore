@@ -50,7 +50,6 @@ class PlaceServiceTest {
         databaseDataSource = DefaultDatabaseDataSource(favoriteDao)
 
         placeService = DefaultPlacesService(mockEngine, MapsHelper(), databaseDataSource)
-        Dispatchers.setMain(UnconfinedTestDispatcher())
     }
 
     @After
