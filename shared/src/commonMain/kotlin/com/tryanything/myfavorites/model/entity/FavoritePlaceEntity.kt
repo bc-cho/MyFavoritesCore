@@ -9,7 +9,7 @@ data class FavoritePlaceEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val name: String,
     val address: String,
-    val imageUrl: String? = null,
+    val imageName: String? = null,
     val latitude: Double,
     val longitude: Double,
     val deleted: Int = 0
@@ -18,7 +18,7 @@ data class FavoritePlaceEntity(
         id = item.id,
         name = item.name,
         address = item.address,
-        imageUrl = item.imageUrl,
+        imageName = item.imageName,
         latitude = item.lat,
         longitude = item.lon
     )
