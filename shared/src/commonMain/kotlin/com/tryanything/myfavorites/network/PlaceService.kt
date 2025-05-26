@@ -1,10 +1,13 @@
 package com.tryanything.myfavorites.network
 
 import com.tryanything.myfavorites.model.dto.PlaceDto
+import com.tryanything.myfavorites.model.entity.FavoritePlaceEntity
 import com.tryanything.myfavorites.model.entity.Places
+import com.tryanything.myfavorites.repository.datasource.DatabaseDataSource
 import com.tryanything.myfavorites.utils.MapsHelper
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -23,9 +26,13 @@ interface PlaceService {
     suspend fun searchByText(text: String): List<PlaceDto>
 }
 
-internal class DefaultPlacesService(val mapsHelper: MapsHelper) : PlaceService {
+internal class DefaultPlacesService(
+    engine: HttpClientEngine,
+    val mapsHelper: MapsHelper,
+    val databaseDataSource: DatabaseDataSource
+) : PlaceService {
 
-    private val httpClient = HttpClient {
+    private val httpClient = HttpClient(engine) {
         defaultRequest {
             url {
                 protocol = URLProtocol.HTTPS
@@ -47,11 +54,20 @@ internal class DefaultPlacesService(val mapsHelper: MapsHelper) : PlaceService {
             header("X-Goog-Api-Key", mapsHelper.getApiKey())
             header(
                 "X-Goog-FieldMask",
-                "places.displayName,places.formattedAddress,places.location,places.photos"
+                "places.id,places.displayName,places.formattedAddress,places.location,places.photos"
             )
             setBody(Json.encodeToString(SearchRequest(text)))
         }.body<Places>()
-        return result.places?.map { it.toDto() } ?: emptyList()
+        val results = result.places?.map { entity -> entity.toDto() } ?: emptyList()
+        if (results.isEmpty()) {
+            return results
+        }
+        val favoritePlaces = databaseDataSource.searchFavoritePlace(results.map { it.id })
+        return results.map { dto -> dto.copy(isFavorite = dto.checkIfFavorite(favoritePlaces)) }
+    }
+
+    private fun PlaceDto.checkIfFavorite(favorites: List<FavoritePlaceEntity>): Boolean {
+        return favorites.any { favorite -> favorite.id == id }
     }
 
     @Serializable
