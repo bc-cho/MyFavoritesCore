@@ -18,7 +18,7 @@ internal data class Place(
         id = id.hashCode().toLong(),
         name = displayName.text,
         address = formattedAddress,
-        photoName = photos?.firstOrNull()?.name,
+        imageName = photos?.firstOrNull()?.name,
         latitude = location.latitude,
         longitude = location.longitude,
         isFavorite = false

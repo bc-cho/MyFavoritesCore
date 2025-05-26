@@ -4,6 +4,7 @@ import com.tryanything.myfavorites.model.dto.PlaceDto
 import com.tryanything.myfavorites.model.entity.FavoritePlaceEntity
 import com.tryanything.myfavorites.model.entity.Places
 import com.tryanything.myfavorites.repository.datasource.DatabaseDataSource
+import com.tryanything.myfavorites.utils.ImageHelper
 import com.tryanything.myfavorites.utils.MapsHelper
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -28,8 +29,8 @@ interface PlaceService {
 
 internal class DefaultPlacesService(
     engine: HttpClientEngine,
-    val mapsHelper: MapsHelper,
-    val databaseDataSource: DatabaseDataSource
+    private val mapsHelper: MapsHelper,
+    private val databaseDataSource: DatabaseDataSource
 ) : PlaceService {
 
     private val httpClient = HttpClient(engine) {
@@ -63,7 +64,17 @@ internal class DefaultPlacesService(
             return results
         }
         val favoritePlaces = databaseDataSource.searchFavoritePlace(results.map { it.id })
-        return results.map { dto -> dto.copy(isFavorite = dto.checkIfFavorite(favoritePlaces)) }
+        return results.map { dto ->
+            dto.copy(
+                isFavorite = dto.checkIfFavorite(favoritePlaces),
+                imageUrl = dto.imageName?.let { name ->
+                    ImageHelper.changeToGooglePhotoUrl(
+                        name = name,
+                        apiKey = mapsHelper.getApiKey()
+                    )
+                }
+            )
+        }
     }
 
     private fun PlaceDto.checkIfFavorite(favorites: List<FavoritePlaceEntity>): Boolean {
