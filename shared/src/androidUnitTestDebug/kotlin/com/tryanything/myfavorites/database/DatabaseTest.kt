@@ -41,15 +41,25 @@ class DatabaseTest {
 
     @Test
     fun addFavorite() = runTest {
-        favoriteDao.insert(FavoritePlaceEntity(0, "Place1", "Address1", null, 37.1, 127.1))
-        favoriteDao.insert(FavoritePlaceEntity(0, "Place2", "Address2", null, 37.1, 127.1))
+        favoriteDao.insert(FavoritePlaceEntity(1000000, "Place1", "Address1", null, 37.1, 127.1))
+        favoriteDao.insert(FavoritePlaceEntity(1000001, "Place2", "Address2", null, 37.1, 127.1))
         assertEquals(favoriteDao.getAllFavorites().first().first().name, "Place1")
         assertEquals(favoriteDao.getAllFavorites().first().size, 2)
     }
 
     @Test
+    fun searchFavorite() = runTest {
+        favoriteDao.insert(FavoritePlaceEntity(1000000, "Place1", "Address1", null, 37.1, 127.1))
+        favoriteDao.insert(FavoritePlaceEntity(1000001, "Place2", "Address2", null, 37.1, 127.1))
+        favoriteDao.insert(FavoritePlaceEntity(1000003, "Place3", "Address2", null, 37.1, 127.1))
+        favoriteDao.insert(FavoritePlaceEntity(1000004, "Place4", "Address2", null, 37.1, 127.1))
+
+        assertTrue(favoriteDao.searchFavorite(listOf(1000000, 1000001)).size == 2)
+    }
+
+    @Test
     fun deleteFavorite() = runTest {
-        favoriteDao.insert(FavoritePlaceEntity(0, "Place1", "Address1", null, 37.1, 127.1))
+        favoriteDao.insert(FavoritePlaceEntity(1000001, "Place1", "Address1", null, 37.1, 127.1))
         assertTrue(favoriteDao.getAllFavorites().first().isNotEmpty())
         assertTrue(favoriteDao.deleteFavorite(favoriteDao.getAllFavorites().first().first().id) == 1)
         assertTrue(favoriteDao.getAllFavorites().first().isEmpty())

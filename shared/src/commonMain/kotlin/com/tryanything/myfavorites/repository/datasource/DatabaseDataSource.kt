@@ -11,6 +11,8 @@ internal interface DatabaseDataSource {
 
     suspend fun getAllFavoritePlace(): List<FavoritePlaceEntity>
 
+    suspend fun searchFavoritePlace(ids: List<Long>): List<FavoritePlaceEntity>
+
     fun observeAllFavoritePlace(): Flow<List<FavoritePlaceEntity>>
 
     suspend fun deleteFavoritePlace(item: FavoritePlaceEntity)
@@ -25,6 +27,10 @@ internal class DefaultDatabaseDataSource(
 
     override suspend fun getAllFavoritePlace(): List<FavoritePlaceEntity> {
         return favoritePlaceDao.getAllFavorites().firstOrNull() ?: emptyList()
+    }
+
+    override suspend fun searchFavoritePlace(ids: List<Long>): List<FavoritePlaceEntity> {
+        return favoritePlaceDao.searchFavorite(ids)
     }
 
     override fun observeAllFavoritePlace(): Flow<List<FavoritePlaceEntity>> {

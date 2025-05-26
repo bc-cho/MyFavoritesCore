@@ -65,12 +65,15 @@ internal class PlaceRepositoryTest {
 
     private val twoPlaces = listOf(
         PlaceDto(
+            id = 0L,
             name = "Harajuku Station",
             address = "〒150-0001 東京都渋谷区神宮前１丁目１８",
             latitude = 0.0,
             longitude = 0.0
+
         ),
         PlaceDto(
+            id = 1L,
             name = "Shinjuku Station",
             address = "〒160-0022 東京都新宿区新宿３丁目３８−１",
             latitude = 0.0,
