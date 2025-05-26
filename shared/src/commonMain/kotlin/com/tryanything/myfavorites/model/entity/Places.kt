@@ -8,17 +8,20 @@ internal data class Places(val places: List<Place>? = null)
 
 @Serializable
 internal data class Place(
+    val id: String,
     val formattedAddress: String,
     val displayName: DisplayName,
     val location: Location,
     val photos: List<Photo>? = null
 ) {
     fun toDto(): PlaceDto = PlaceDto(
+        id = id.hashCode().toLong(),
         name = displayName.text,
         address = formattedAddress,
-        imageUrl = photos?.firstOrNull()?.name,
+        photoName = photos?.firstOrNull()?.name,
         latitude = location.latitude,
         longitude = location.longitude,
+        isFavorite = false
     )
 }
 
