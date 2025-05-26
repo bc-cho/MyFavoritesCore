@@ -47,6 +47,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.serialization)
+            implementation(libs.ktor.client.mock)
             implementation(libs.ktor.client.negotiation)
             implementation(libs.ktor.serialization.json)
             implementation(libs.kotlin.coroutines.core)
