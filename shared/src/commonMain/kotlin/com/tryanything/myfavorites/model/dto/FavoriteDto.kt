@@ -15,6 +15,7 @@ data class FavoriteDto(
         id = item.id,
         name = item.name,
         address = item.address,
+        imageName = item.imageName,
         lat = item.latitude,
         lon = item.longitude
     )
