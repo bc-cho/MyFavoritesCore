@@ -37,7 +37,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "myfavorites-core"
             xcf.add(this)
             isStatic = true
         }
