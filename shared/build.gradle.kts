@@ -15,8 +15,9 @@ plugins {
     id("maven-publish")
 }
 
+val projectVersion = System.getenv("TAG_VERSION")?.replace("v", "") ?: project.version.toString()
 group = "com.tryanything"
-version = project.properties["version"] as String
+version = projectVersion
 
 kotlin {
     androidTarget {
@@ -106,6 +107,7 @@ android {
 
 publishing {
     repositories {
+        mavenLocal()
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/bc-cho/MyFavoritesCore")
@@ -121,7 +123,7 @@ publishing {
             from(components["kotlin"])
             groupId = project.group.toString()
             artifactId = "myfavorites-core"
-            version = System.getenv("TAG_VERSION")?.replace("v", "") ?: project.version.toString()
+            version = projectVersion
         }
     }
 }
